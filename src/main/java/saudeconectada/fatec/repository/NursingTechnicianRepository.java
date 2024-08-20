@@ -1,4 +1,4 @@
-package saudeconectada.fatec.domain.repository;
+package saudeconectada.fatec.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import saudeconectada.fatec.domain.model.NursingTechnician;
