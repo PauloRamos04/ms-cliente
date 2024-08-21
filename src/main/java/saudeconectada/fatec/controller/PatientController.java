@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import saudeconectada.fatec.domain.dto.PatientDTO;
+import saudeconectada.fatec.domain.model.Patient;
 import saudeconectada.fatec.service.PatientService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/patient")
@@ -14,6 +17,16 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+
+    @GetMapping
+    public ResponseEntity<List<Patient>> getAllPatients() {
+        try {
+            List<Patient> patients = patientService.getPatients();
+            return ResponseEntity.ok().body(patients);
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerPatient(@RequestBody @Validated PatientDTO patientDTO) {

@@ -14,12 +14,10 @@ public class HealthProfessionalService {
     private HealthProfessionalRepository healthProfessionalRepository;
 
     public List<HealthProfessional> getAllHealthProfessionals() {
-        List<HealthProfessional> HealthProfessionals = this.healthProfessionalRepository.findAll();
-        return HealthProfessionals;
+        return this.healthProfessionalRepository.findAll();
     }
 
     public HealthProfessional postHealthProfessional(HealthProfessional HealthProfessional) {
-        HealthProfessional newHealthProfessional = this.healthProfessionalRepository.save(HealthProfessional);
-        return newHealthProfessional;
+        return this.healthProfessionalRepository.save(HealthProfessional);
     }
 }
