@@ -1,6 +1,7 @@
 package saudeconectada.fatec.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import saudeconectada.fatec.domain.model.HealthProfessional;
@@ -19,13 +20,16 @@ public class HealthProfessionalController {
     public ResponseEntity<List<HealthProfessional>> getHealthProfessionals() {
         try {
             List<HealthProfessional> healthProfessionals = healthProfessionalService.getAllHealthProfessionals();
-            return ResponseEntity.ok().body(healthProfessionals);
+            if(healthProfessionals.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.ok(healthProfessionals);
         } catch (Exception e) {
-             return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<?> addHealthProfessional(@RequestBody HealthProfessional healthProfessional) {
         try {
             HealthProfessional newHealthProfessional = healthProfessionalService.postHealthProfessional(healthProfessional);

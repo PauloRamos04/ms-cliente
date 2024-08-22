@@ -17,7 +17,7 @@ public class HealthProfessionalService {
         return this.healthProfessionalRepository.findAll();
     }
 
-    public HealthProfessional postHealthProfessional(HealthProfessional HealthProfessional) {
-        return this.healthProfessionalRepository.save(HealthProfessional);
+    public HealthProfessional postHealthProfessional(HealthProfessional healthProfessional) {
+        return healthProfessionalRepository.save(healthProfessional);
     }
 }

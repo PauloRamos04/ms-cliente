@@ -27,12 +27,12 @@ public class PatientService {
         return this.patientRepository.findAll();
     }
 
+
     public Patient createPatient(PatientDTO patientDTO) {
         logger.info("Iniciando o cadastro do paciente: {}", patientDTO);
 
         Patient patient = modelMapper.map(patientDTO, Patient.class);
 
-        // Configura os filhos, se houver
         if (patient.getChildren() != null) {
             patient.getChildren().forEach(child -> child.setParent(patient));
         }
