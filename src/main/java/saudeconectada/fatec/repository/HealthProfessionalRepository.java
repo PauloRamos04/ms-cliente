@@ -8,12 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface HealthProfessionalRepository extends JpaRepository<HealthProfessional, Long> {
+    HealthProfessional findByEmail(String email);
 
-    Optional<HealthProfessional> findByCpf(String cpf);
-
-    Optional<HealthProfessional> findByEmail(String email);
-
-    boolean existsByCpf(String cpf);
-
-    boolean existsByEmail(String email);
+    HealthProfessional findByCpf(String cpf);
 }

@@ -1,4 +1,4 @@
-package saudeconectada.fatec.config;
+package saudeconectada.fatec.infra.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

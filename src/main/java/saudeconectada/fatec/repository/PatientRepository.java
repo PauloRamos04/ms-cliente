@@ -6,4 +6,7 @@ import saudeconectada.fatec.domain.model.Patient;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
+    Patient findByEmail(String email);
+
+    Patient findByCpf(String cpf);
 }

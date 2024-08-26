@@ -38,4 +38,11 @@ public class HealthProfessionalController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/login/professional")
+    public ResponseEntity<String> loginHealthProfessional(@RequestParam String cpf, @RequestParam String password) {
+        String token = healthProfessionalService.loginHealthProfessional(cpf, password);
+        return ResponseEntity.ok(token);
+    }
+
 }
