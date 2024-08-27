@@ -1,9 +1,13 @@
 package saudeconectada.fatec.controller;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import saudeconectada.fatec.domain.dto.HealthProfessionalDTO;
 import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.service.HealthProfessionalService;
 
@@ -30,14 +34,25 @@ public class HealthProfessionalController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> addHealthProfessional(@RequestBody HealthProfessional healthProfessional) {
+    public ResponseEntity<String> registerHealthProfessional(@Validated @RequestBody HealthProfessionalDTO healthProfessionalDTO) {
         try {
-            HealthProfessional newHealthProfessional = healthProfessionalService.postHealthProfessional(healthProfessional);
-            return ResponseEntity.ok(healthProfessional);
-        }catch (Exception e) {
+            healthProfessionalService.postHealthProfessional(healthProfessionalDTO);
+            return ResponseEntity.ok("Profissional de saúde cadastrado com sucesso.");
+        } catch (ConstraintViolationException e) {
+            StringBuilder sb = new StringBuilder();
+            for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+                sb.append(violation.getMessage()).append(", ");
+            }
+            System.out.println("Dados recebidos: " + healthProfessionalDTO.toString());
+            return ResponseEntity.badRequest().body("Erro de validação: " + sb.toString());
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao cadastrar profissional de saúde.");
         }
     }
+
 
     @PostMapping("/login/professional")
     public ResponseEntity<String> loginHealthProfessional(@RequestParam String cpf, @RequestParam String password) {
