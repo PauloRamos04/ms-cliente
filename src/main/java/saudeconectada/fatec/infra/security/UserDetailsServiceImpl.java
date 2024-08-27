@@ -23,7 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Verifique se está buscando pelo CPF
         Patient patient = patientRepository.findByCpf(username);
         if (patient == null) {
             throw new UsernameNotFoundException("Paciente não encontrado com CPF: " + username);

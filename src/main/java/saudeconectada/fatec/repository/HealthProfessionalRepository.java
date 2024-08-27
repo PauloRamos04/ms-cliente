@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface HealthProfessionalRepository extends JpaRepository<HealthProfessional, Long> {
-    HealthProfessional findByEmail(String email);
-
     HealthProfessional findByCpf(String cpf);
 }

@@ -43,32 +43,26 @@ public class PatientService {
     }
 
     public void registerPatient(PatientDTO patientDTO) {
-        // Validação da senha
         if (patientDTO.getPassword() == null ||
                 patientDTO.getPassword().length() < 8 ||
                 patientDTO.getPassword().length() > 20) {
             throw new IllegalArgumentException("A senha deve ter entre 8 e 20 caracteres.");
         }
 
-        // Criptografar a senha
         String encryptedPassword = passwordEncoder.encode(patientDTO.getPassword());
         patientDTO.setPassword(encryptedPassword);
 
-        // Mapear DTO para modelo Patient
         Patient patient = modelMapper.map(patientDTO, Patient.class);
-        patient.setPassword(encryptedPassword); // garantir que a senha criptografada seja definida
+        patient.setPassword(encryptedPassword);
 
-        // Persistir o paciente
         patientRepository.save(patient);
     }
 
     public String loginPatient(String cpf, String password) {
-        // Criação do token de autenticação
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(cpf, password);
-        // Autenticação do token
+
         Authentication authentication = authenticationManager.authenticate(authToken);
 
-        // Aqui é onde você deve procurar o paciente pelo CPF, não pelo email
         Patient patient = patientRepository.findByCpf(cpf);
         if (patient == null) {
             throw new UsernameNotFoundException("Paciente não encontrado com CPF: " + cpf);

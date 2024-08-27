@@ -21,15 +21,13 @@ public class Child {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @JsonBackReference // Evita recursão na serialização
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Patient parent;
 
-    // Construtor sem argumentos (necessário para JPA)
     public Child() {}
 
-    // Construtor com argumentos
     public Child(String firstName, String lastName, LocalDate birthDate, Gender gender, Patient parent) {
         this.firstName = firstName;
         this.lastName = lastName;

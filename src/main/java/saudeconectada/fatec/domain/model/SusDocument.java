@@ -30,8 +30,8 @@ public class SusDocument {
 
     private LocalDate expirationDate;
 
-    @JsonBackReference // Evita recursão na serialização
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-    private Patient patient; // Relacionamento com Patient
+    private Patient patient;
 }

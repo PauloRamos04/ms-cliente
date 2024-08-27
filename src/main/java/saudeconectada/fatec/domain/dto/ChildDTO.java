@@ -8,5 +8,5 @@ public class ChildDTO {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
-    private String gender; // Ajuste conforme necessário
+    private String gender;
 }

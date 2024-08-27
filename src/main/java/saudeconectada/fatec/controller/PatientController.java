@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import saudeconectada.fatec.domain.dto.LoginRequest;
@@ -23,9 +22,6 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @GetMapping
     public ResponseEntity<List<Patient>> getAllPatients() {
         try {
@@ -35,7 +31,7 @@ public class PatientController {
             }
             return ResponseEntity.ok(patients);
         } catch (Exception e) {
-            e.printStackTrace(); // Adicionando log da exceção
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -55,7 +51,7 @@ public class PatientController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace(); // Adicionando log da exceção
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao cadastrar paciente.");
         }
     }
