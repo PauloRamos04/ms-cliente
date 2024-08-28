@@ -61,4 +61,10 @@ public class PatientController {
         String token = patientService.loginPatient(loginRequest.getCpf(), loginRequest.getPassword());
         return ResponseEntity.ok(new LoginResponse(token, "Login Ok"));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutPatient(@RequestBody LoginRequest loginRequest) {
+        patientService.logoutPatient(loginRequest.getCpf());
+        return ResponseEntity.ok("Logout realizado com sucesso.");
+    }
 }

@@ -16,7 +16,9 @@ import saudeconectada.fatec.domain.model.Patient;
 import saudeconectada.fatec.infra.security.TokenService;
 import saudeconectada.fatec.repository.PatientRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PatientService {
@@ -37,6 +39,8 @@ public class PatientService {
 
     @Autowired
     private TokenService tokenService;
+
+    private Map<String, String> loggedInUsers = new HashMap<>();
 
     public List<Patient> getPatients() {
         return this.patientRepository.findAll();
@@ -59,15 +63,19 @@ public class PatientService {
     }
 
     public String loginPatient(String cpf, String password) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(cpf, password);
-
-        Authentication authentication = authenticationManager.authenticate(authToken);
-
-        Patient patient = patientRepository.findByCpf(cpf);
-        if (patient == null) {
-            throw new UsernameNotFoundException("Paciente não encontrado com CPF: " + cpf);
+        if (loggedInUsers.containsKey(cpf)) {
+            throw new IllegalStateException("Paciente já está logado.");
         }
 
-        return tokenService.generateToken((UserDetails) authentication.getPrincipal());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(cpf, password);
+        Authentication authentication = authenticationManager.authenticate(authToken);
+        String token = tokenService.generateToken((UserDetails) authentication.getPrincipal());
+
+        loggedInUsers.put(cpf, token);
+        return token;
+    }
+
+    public void logoutPatient(String cpf) {
+        loggedInUsers.remove(cpf);
     }
 }

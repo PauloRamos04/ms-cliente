@@ -1,78 +1,81 @@
 package saudeconectada.fatec.infra.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import saudeconectada.fatec.repository.PatientRepository;
-import saudeconectada.fatec.repository.HealthProfessionalRepository;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.security.Key;
 import java.util.Date;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class TokenService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
-
     @Value("${api.security.token.secret}")
     private String secret;
 
-    @Autowired
-    private HttpServletRequest request;
+    @Value("${api.security.token.expiration}")
+    private Long expiration;
 
-    @Autowired
-    private PatientRepository patientRepository;
-
-    @Autowired
-    private HealthProfessionalRepository healthProfessionalRepository;
-
+    // Método para gerar o token e armazená-lo na sessão HTTP
     public String generateToken(UserDetails userDetails) {
-        HttpSession session = request.getSession();
-        String existingToken = (String) session.getAttribute("token");
-        if (existingToken != null) {
-            return existingToken;
-        }
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
-                    .withIssuer("auth-api")
-                    .withSubject(userDetails.getUsername())
-                    .withExpiresAt(Date.from(generateExpirationDate()))
-                    .sign(algorithm);
-            session.setAttribute("token", token);
-            return token;
-        } catch (JWTCreationException ex) {
-            throw new RuntimeException("Error while generating token", ex);
-        }
+        String token = doGenerateToken(Map.of("cpf", userDetails.getUsername()).toString(), userDetails.getUsername());
+        return token;
     }
 
+    // Método interno para geração do token JWT usando o JJWT
+    private String doGenerateToken(String cpf, String subject) {
+        Key signingKey = Keys.hmacShaKeyFor(secret.getBytes()); // Usando a chave segura
 
-    public String validateToken(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("auth-api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (JWTVerificationException ex) {
-            return null;
-        }
+        // Cria um HashMap de claims
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("cpf", cpf); // Adicione o CPF como claim
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(signingKey) // Usando a chave gerada
+                .compact();
     }
 
-    private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    // Método para validar o token
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    // Método para extrair o nome de usuário do token
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    // Método para obter a data de expiração do token
+    private Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    // Método genérico para obter claims do token
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = Jwts.parser()
+                .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes())) // Usando a chave segura
+                .parseClaimsJws(token)
+                .getBody();
+        return claimsResolver.apply(claims);
+    }
+
+    // Método para verificar se o token está expirado
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import saudeconectada.fatec.domain.dto.HealthProfessionalDTO;
+import saudeconectada.fatec.domain.dto.LoginRequest;
+import saudeconectada.fatec.domain.dto.LoginResponse;
 import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.service.HealthProfessionalService;
 
@@ -53,11 +55,17 @@ public class HealthProfessionalController {
         }
     }
 
-
-    @PostMapping("/login/professional")
-    public ResponseEntity<String> loginHealthProfessional(@RequestParam String cpf, @RequestParam String password) {
-        String token = healthProfessionalService.loginHealthProfessional(cpf, password);
-        return ResponseEntity.ok(token);
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginHealthProfessional(@RequestBody LoginRequest loginRequest) {
+        String token = healthProfessionalService.loginHealthProfessional(loginRequest.getCpf(), loginRequest.getPassword());
+        return ResponseEntity.ok(new LoginResponse(token, "Login Ok"));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutHealthProfessional(@RequestBody LoginRequest loginRequest) {
+        healthProfessionalService.logoutHealthProfessional(loginRequest.getCpf());
+        return ResponseEntity.ok("Logout realizado com sucesso.");
+    }
+
 
 }
