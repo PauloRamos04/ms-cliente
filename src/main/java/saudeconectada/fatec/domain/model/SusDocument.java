@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "sus_documents")
+@Table(name = "sus_document")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

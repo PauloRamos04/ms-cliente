@@ -14,7 +14,7 @@
 
     @Entity
     @Data
-    @Table(name = "health_professionals")
+    @Table(name = "health_professional")
     public class HealthProfessional {
 
         @Id

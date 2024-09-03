@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "children")
+@Table(name = "child")
 @Data
 public class Child {
     @Id
