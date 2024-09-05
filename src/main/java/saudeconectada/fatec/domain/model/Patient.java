@@ -21,7 +21,7 @@ public class Patient {
     private String address;
     private Gender gender;
     private LocalDate birthDate;
-    private String deficiency;
+    private Deficiency deficiency;
     private String photo;
     private String password;
 

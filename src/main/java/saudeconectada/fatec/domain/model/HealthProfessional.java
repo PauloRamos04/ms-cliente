@@ -31,17 +31,4 @@
         private LocalDate birthDate;
         private Gender gender;
         private ProfessionalType professionalType;
-
-        @OneToMany(mappedBy = "healthProfessional", cascade = CascadeType.ALL, orphanRemoval = true)
-        private Set<LoginHistory> loginHistory = new HashSet<>();
-
-        public void addLoginHistory(LoginHistory history) {
-            loginHistory.add(history);
-            history.setHealthProfessional(this);
-        }
-
-        public void removeLoginHistory(LoginHistory history) {
-            loginHistory.remove(history);
-            history.setHealthProfessional(null);
-        }
     }

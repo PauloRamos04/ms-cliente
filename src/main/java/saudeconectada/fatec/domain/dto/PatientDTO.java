@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import saudeconectada.fatec.domain.model.Deficiency;
 import saudeconectada.fatec.domain.model.Gender;
 
 import java.time.LocalDate;
@@ -38,7 +39,9 @@ public class PatientDTO {
     @NotNull(message = "A data de nascimento não deve ser nula")
     private LocalDate birthDate;
 
-    private String deficiency;
+    @NotNull(message = "A deficiencia não pode ser nula")
+    private Deficiency deficiency;
+
     private String photo;
 
     @Size(min = 8, max = 20, message = "Tamanho deve ser entre 8 e 20")
