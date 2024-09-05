@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import saudeconectada.fatec.domain.model.Deficiency;
-import saudeconectada.fatec.domain.model.Gender;
+import saudeconectada.fatec.domain.enums.Deficiency;
+import saudeconectada.fatec.domain.enums.Gender;
 
 import java.time.LocalDate;
 

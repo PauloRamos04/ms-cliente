@@ -3,14 +3,13 @@ package saudeconectada.fatec.domain.dto;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import saudeconectada.fatec.domain.model.Gender;
-import saudeconectada.fatec.domain.model.ProfessionalType;
+import saudeconectada.fatec.domain.enums.Gender;
+import saudeconectada.fatec.domain.enums.ProfessionalType;
 
 import java.time.LocalDate;
 

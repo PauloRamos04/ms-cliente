@@ -2,6 +2,8 @@ package saudeconectada.fatec.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import saudeconectada.fatec.domain.enums.Deficiency;
+import saudeconectada.fatec.domain.enums.Gender;
 
 import java.time.LocalDate;
 

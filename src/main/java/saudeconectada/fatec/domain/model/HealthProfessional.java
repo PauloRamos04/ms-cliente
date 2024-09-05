@@ -1,16 +1,11 @@
     package saudeconectada.fatec.domain.model;
 
     import jakarta.persistence.*;
-    import jakarta.validation.constraints.Email;
-    import jakarta.validation.constraints.NotNull;
-    import jakarta.validation.constraints.Size;
-    import lombok.AllArgsConstructor;
     import lombok.Data;
-    import lombok.NoArgsConstructor;
+    import saudeconectada.fatec.domain.enums.Gender;
+    import saudeconectada.fatec.domain.enums.ProfessionalType;
 
     import java.time.LocalDate;
-    import java.util.HashSet;
-    import java.util.Set;
 
     @Entity
     @Data

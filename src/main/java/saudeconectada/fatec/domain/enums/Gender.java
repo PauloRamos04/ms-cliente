@@ -1,4 +1,4 @@
-package saudeconectada.fatec.domain.model;
+package saudeconectada.fatec.domain.enums;
 
 public enum Gender {
     MASCULINO,
