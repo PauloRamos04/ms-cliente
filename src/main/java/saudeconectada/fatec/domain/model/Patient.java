@@ -6,11 +6,12 @@ import saudeconectada.fatec.domain.enums.Deficiency;
 import saudeconectada.fatec.domain.enums.Gender;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "patient")
-public class Patient {
+public class Patient implements Verifiable { // Implementando a interface
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,5 +27,11 @@ public class Patient {
     private Deficiency deficiency;
     private String photo;
     private String password;
+    private UUID verificationToken;
+    private boolean verified = false;
 
+    @Override
+    public boolean isVerified() {
+        return verified;
+    }
 }

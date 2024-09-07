@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
-        logger.error("Exception: {}", ex.getMessage(), ex); // Inclui stack trace no log
+        logger.error("Exception: {}", ex.getMessage(), ex);
         return new ResponseEntity<>("Ocorreu um erro inesperado: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

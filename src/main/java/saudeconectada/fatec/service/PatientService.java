@@ -6,9 +6,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import saudeconectada.fatec.domain.dto.PatientDTO;
 import saudeconectada.fatec.domain.model.Patient;
+import saudeconectada.fatec.domain.model.Verifiable;
+import saudeconectada.fatec.infra.email.EmailService;
 import saudeconectada.fatec.repository.PatientRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PatientService extends UserService<PatientDTO> {
@@ -22,12 +25,15 @@ public class PatientService extends UserService<PatientDTO> {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<Patient> getPatients() {
         return this.patientRepository.findAll();
     }
 
     @Override
-    public String registerUser(PatientDTO patientDTO) {
+    public void registerUser(PatientDTO patientDTO) {
         if (patientDTO.getCpf() == null || patientDTO.getCpf().isEmpty()) {
             throw new IllegalArgumentException("O CPF não deve ser nulo ou vazio.");
         }
@@ -38,7 +44,14 @@ public class PatientService extends UserService<PatientDTO> {
         patientDTO.setPassword(encryptedPassword);
         Patient patient = modelMapper.map(patientDTO, Patient.class);
         patient.setPassword(encryptedPassword);
+        patient.setVerificationToken(UUID.randomUUID());
         patientRepository.save(patient);
-        return "Paciente registrado com sucesso.";
+        emailService.sendVerifyMail(patient);
+    }
+
+    @Override
+    protected Verifiable findUserByCpf(String cpf) {
+        Patient patient = patientRepository.findByCpf(cpf);
+        return patient != null ? patient : null;
     }
 }
