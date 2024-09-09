@@ -33,12 +33,17 @@ public abstract class UserService<T> {
 
     public String loginUser(String cpf, String password) {
 
+        Verifiable user = findUserByCpf(cpf);
+
+        if (user == null) {
+            logger.warn("Usuário com CPF {} não encontrado.", cpf);
+            throw new IllegalArgumentException("CPF não encontrado.");
+        }
+
         if (loggedInUsers.containsKey(cpf)) {
             logger.warn("Usuário já está logado: {}", cpf);
             throw new IllegalStateException("Usuário já está logado.");
         }
-
-        Verifiable user = findUserByCpf(cpf);
 
         if (!user.isVerified()) {
             logger.warn("Usuário com CPF {} ainda não confirmou o e-mail.", cpf);
