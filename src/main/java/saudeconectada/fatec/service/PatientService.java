@@ -37,6 +37,9 @@ public class PatientService extends UserService<PatientDTO> {
         if (patientDTO.getCpf() == null || patientDTO.getCpf().isEmpty()) {
             throw new IllegalArgumentException("O CPF não deve ser nulo ou vazio.");
         }
+        if(patientRepository.existsByEmail(patientDTO.getEmail())) {
+            throw new IllegalArgumentException("Email ja cadastrado");
+        }
         if (patientRepository.existsByCpf(patientDTO.getCpf())) {
             throw new IllegalArgumentException("CPF já cadastrado.");
         }
@@ -45,8 +48,9 @@ public class PatientService extends UserService<PatientDTO> {
         Patient patient = modelMapper.map(patientDTO, Patient.class);
         patient.setPassword(encryptedPassword);
         patient.setVerificationToken(UUID.randomUUID());
-        patientRepository.save(patient);
         emailService.sendVerifyMail(patient);
+        patientRepository.save(patient);
+
     }
 
     @Override

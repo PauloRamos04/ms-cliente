@@ -10,5 +10,6 @@ import java.util.UUID;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     Patient findByCpf(String cpf);
     boolean existsByCpf(String cpf);
+    boolean existsByEmail(String email);
     Patient findByVerificationToken(UUID token);
 }
