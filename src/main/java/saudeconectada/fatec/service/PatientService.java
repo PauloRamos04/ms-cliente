@@ -53,9 +53,5 @@ public class PatientService extends UserService<PatientDTO> {
 
     }
 
-    @Override
-    protected Verifiable findUserByCpf(String cpf) {
-        Patient patient = patientRepository.findByCpf(cpf);
-        return patient != null ? patient : null;
-    }
+
 }
