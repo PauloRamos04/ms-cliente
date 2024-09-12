@@ -7,7 +7,7 @@ import saudeconectada.fatec.domain.model.Patient;
 import java.util.UUID;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, Long> {
+public interface PatientRepository extends JpaRepository<Patient, Long>, UserRepository<Patient> {
     Patient findByCpf(String cpf);
     boolean existsByCpf(String cpf);
     boolean existsByEmail(String email);

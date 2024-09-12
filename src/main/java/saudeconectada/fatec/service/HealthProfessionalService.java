@@ -45,9 +45,4 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
         healthProfessionalRepository.save(healthProfessional);
     }
 
-    @Override
-    protected Verifiable findUserByCpf(String cpf) {
-        HealthProfessional healthProfessional = healthProfessionalRepository.findByCpf(cpf);
-        return healthProfessional != null ? healthProfessional : null;
-    }
 }
