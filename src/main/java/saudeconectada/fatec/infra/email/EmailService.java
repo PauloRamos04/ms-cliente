@@ -64,7 +64,7 @@ public class EmailService {
                 "<div class='content'>" +
                 "<p>Prezado(a),</p>" +
                 "<p>Obrigado por se registrar na nossa plataforma. Para concluir o seu cadastro e ativar sua conta, por favor, clique no botão abaixo:</p>" +
-                "<p><a href='http://localhost:8080/verification-result?token=" + token + "' class='button'>Verificar E-mail</a></p>" +
+                "<p><a href='http://localhost:8080/verification-result.html?token=" + token + "' class='button'>Verificar E-mail</a></p>" +
                 "<p>Se você não se registrou ou se não reconhece esta solicitação, por favor ignore este e-mail.</p>" +
                 "<p>Para mais informações ou assistência, não hesite em entrar em contato com nossa equipe de suporte.</p>" +
                 "</div>" +
