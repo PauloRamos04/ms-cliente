@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import saudeconectada.fatec.domain.model.Patient;
 import saudeconectada.fatec.repository.PatientRepository;
+import saudeconectada.fatec.infra.email.VerifyService;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("auth")
 public class VerifyController {
-
-    @Autowired
-    private EmailService emailService;
 
     @Autowired
     private VerifyService verifyService;
@@ -29,10 +28,16 @@ public class VerifyController {
     public ResponseEntity<String> verify(@RequestParam("token") String token) {
         try {
             UUID verificationToken = UUID.fromString(token);
-            String message = verifyService.verifyUser(verificationToken);
-            return ResponseEntity.ok(message);
+            Optional<Patient> patientOptional = patientRepository.findByVerificationToken(verificationToken);
+
+            if (patientOptional.isPresent()) {
+                String message = verifyService.verifyUser(verificationToken);
+                return ResponseEntity.ok(message);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido ou expirado.");
+            }
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao autenticar paciente.");
         }

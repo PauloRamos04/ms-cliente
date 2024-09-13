@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de E-mail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #007bff;
+            margin: 0 0 10px 0;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            font-size: 16px;
+            color: #ffffff;
+            background: #007bff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button-close {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Verificação de E-mail</h1>
+    <p id="message">Aguarde, estamos processando sua verificação...</p>
+    <button id="button" class="button button-close" style="display: none;" onclick="window.close();">Fechar</button>
+</div>
+<script>
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const messageElem = document.getElementById('message');
+        const buttonElem = document.getElementById('button');
+
+        if (token) {
+            // Simula uma chamada AJAX para verificar o token com o backend
+            setTimeout(() => {
+                // Substitua o código de simulação por uma chamada real ao backend, se necessário
+                fetch(`/auth/verify?token=${token}`, { method: 'GET' })
+                    .then(response => {
+                        if (response.ok) {
+                            messageElem.textContent = 'Seu e-mail foi verificado com sucesso!';
+                            buttonElem.style.display = 'inline-block';
+                        } else {
+                            messageElem.textContent = 'Token inválido ou expirado.';
+                        }
+                    })
+                    .catch(() => {
+                        messageElem.textContent = 'Erro ao processar a verificação.';
+                    });
+            }, 2000);
+        } else {
+            messageElem.textContent = 'Token inválido ou expirado.';
+        }
+    };
+</script>
+</body>
+</html>
