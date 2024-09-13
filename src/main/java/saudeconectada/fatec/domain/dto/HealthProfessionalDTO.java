@@ -5,6 +5,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,8 @@ public class HealthProfessionalDTO {
     private String password;
 
     @NotNull
-    @Size(min = 11, max = 11)
+    @Size(min = 11, max = 11, message = "O CPF deve ter 11 dígitos.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter apenas números.")
     @Column(unique = true)
     private String cpf;
 
