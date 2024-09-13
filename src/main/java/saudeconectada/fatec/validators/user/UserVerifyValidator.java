@@ -1,23 +1,21 @@
-package saudeconectada.fatec.validators;
+package saudeconectada.fatec.validators.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import saudeconectada.fatec.domain.model.Verifiable;
-import saudeconectada.fatec.repository.PatientRepository;
-import saudeconectada.fatec.repository.UserRepository;
 import saudeconectada.fatec.service.UserRepositoryService;
 
 @Component
-public  class UserGetCpfValidator implements UserValidator {
+public class UserVerifyValidator implements UserValidator {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserGetCpfValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserVerifyValidator.class);
 
     private final UserRepositoryService userRepositoryService;
 
     @Autowired
-    public UserGetCpfValidator(UserRepositoryService userRepositoryService) {
+    public UserVerifyValidator(UserRepositoryService userRepositoryService) {
         this.userRepositoryService = userRepositoryService;
     }
 
@@ -25,13 +23,10 @@ public  class UserGetCpfValidator implements UserValidator {
     public void validar(String cpf) {
         Verifiable user = userRepositoryService.findUserByCpf(cpf);
 
-        if (user == null) {
-            logger.error("CPF ou senha inválidos para CPF: {}", cpf);
-            throw new IllegalArgumentException("CPF ou senha inválidos.");
+        if (!user.isVerified()) {
+            logger.warn("Usuário com CPF {} ainda não confirmou o e-mail.", cpf);
+            throw new IllegalStateException("Usuário não confirmou o e-mail.");
         }
     }
-
-
-
 
 }

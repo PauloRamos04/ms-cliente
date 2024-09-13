@@ -8,6 +8,7 @@ import saudeconectada.fatec.domain.dto.HealthProfessionalDTO;
 import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.domain.model.Verifiable;
 import saudeconectada.fatec.repository.HealthProfessionalRepository;
+import saudeconectada.fatec.validators.heathProfessional.HealthProfessionalValidator;
 
 import java.util.List;
 
@@ -23,20 +24,17 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private List<HealthProfessionalValidator> validators;
+
     public List<HealthProfessional> getAllHealthProfessionals() {
         return this.healthProfessionalRepository.findAll();
     }
 
     @Override
     public void registerUser(HealthProfessionalDTO healthProfessionalDTO) {
-        if (healthProfessionalDTO.getPassword() == null ||
-                healthProfessionalDTO.getPassword().length() < 8 ||
-                healthProfessionalDTO.getPassword().length() > 20) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-        if (healthProfessionalRepository.existsByCpf(healthProfessionalDTO.getCpf())) {
-            throw new IllegalArgumentException("CPF já cadastrado.");
-        }
+
+        validators.forEach(v -> v.validar(healthProfessionalDTO.getCpf()));
 
         String encryptedPassword = passwordEncoder.encode(healthProfessionalDTO.getPassword());
         healthProfessionalDTO.setPassword(encryptedPassword);

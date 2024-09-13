@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import saudeconectada.fatec.infra.security.TokenService;
-import saudeconectada.fatec.validators.UserValidator;
+import saudeconectada.fatec.validators.user.UserValidator;
 
 import java.util.HashMap;
 import java.util.List;

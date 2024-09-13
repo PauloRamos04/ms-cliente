@@ -9,7 +9,12 @@ import saudeconectada.fatec.domain.model.Patient;
 import saudeconectada.fatec.domain.model.Verifiable;
 import saudeconectada.fatec.infra.email.EmailService;
 import saudeconectada.fatec.repository.PatientRepository;
+import saudeconectada.fatec.validators.patient.PatientGetCpfValidator;
+import saudeconectada.fatec.validators.patient.PatientGetEmailValidator;
+import saudeconectada.fatec.validators.patient.PatientValidator;
+import saudeconectada.fatec.validators.user.UserValidator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,21 +33,21 @@ public class PatientService extends UserService<PatientDTO> {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private List<PatientValidator> validators;
+
     public List<Patient> getPatients() {
         return this.patientRepository.findAll();
     }
 
     @Override
     public void registerUser(PatientDTO patientDTO) {
-        if (patientDTO.getCpf() == null || patientDTO.getCpf().isEmpty()) {
-            throw new IllegalArgumentException("O CPF não deve ser nulo ou vazio.");
-        }
-        if(patientRepository.existsByEmail(patientDTO.getEmail())) {
-            throw new IllegalArgumentException("Email ja cadastrado");
-        }
-        if (patientRepository.existsByCpf(patientDTO.getCpf())) {
-            throw new IllegalArgumentException("CPF já cadastrado.");
-        }
+
+        validators.forEach(v -> {
+            v.validar(patientDTO.getCpf());
+            v.validar(patientDTO.getEmail());
+        });
+
         String encryptedPassword = passwordEncoder.encode(patientDTO.getPassword());
         patientDTO.setPassword(encryptedPassword);
         Patient patient = modelMapper.map(patientDTO, Patient.class);
