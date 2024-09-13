@@ -32,7 +32,7 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
     }
 
     @Override
-    public void registerUser(HealthProfessionalDTO healthProfessionalDTO) {
+    public synchronized void registerUser(HealthProfessionalDTO healthProfessionalDTO) {
 
         validators.forEach(v -> v.validar(healthProfessionalDTO.getCpf()));
 

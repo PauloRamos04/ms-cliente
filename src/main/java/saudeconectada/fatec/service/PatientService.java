@@ -41,7 +41,7 @@ public class PatientService extends UserService<PatientDTO> {
     }
 
     @Override
-    public void registerUser(PatientDTO patientDTO) {
+    public synchronized void registerUser(PatientDTO patientDTO) {
 
         validators.forEach(v -> {
             v.validar(patientDTO.getCpf());

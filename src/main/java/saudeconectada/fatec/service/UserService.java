@@ -34,7 +34,7 @@ public abstract class UserService<T> {
 
     public abstract void registerUser(T userDTO);
 
-    public String loginUser(String cpf, String password) {
+    public synchronized String loginUser(String cpf, String password) {
 
         try {
             validators.forEach(v -> v.validar(cpf));
