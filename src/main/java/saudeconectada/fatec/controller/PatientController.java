@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/patient")
-@Validated
 public class PatientController extends UserController<PatientDTO> {
 
     @Autowired

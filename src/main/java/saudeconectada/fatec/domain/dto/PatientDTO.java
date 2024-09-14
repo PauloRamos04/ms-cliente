@@ -19,8 +19,7 @@ public class PatientDTO {
     private String lastName;
 
     @NotBlank(message = "O CPF não deve ser nulo")
-    @Size(min = 11, max = 11, message = "O CPF deve ter 11 dígitos.")
-    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter apenas números.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos, sem caracteres especiais.")
     private String cpf;
 
     @Email(message = "Email deve ser válido")
