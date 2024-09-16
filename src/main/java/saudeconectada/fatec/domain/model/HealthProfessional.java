@@ -2,6 +2,7 @@ package saudeconectada.fatec.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import saudeconectada.fatec.domain.enums.Deficiency;
 import saudeconectada.fatec.domain.enums.Gender;
 import saudeconectada.fatec.domain.enums.ProfessionalType;
 
@@ -16,17 +17,20 @@ public class HealthProfessional implements Verifiable { // Implementando a inter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String password;
     private String cpf;
     private String email;
-    private String healthUnitNumber;
     private String phone;
     private String address;
-    private LocalDate birthDate;
     private Gender gender;
-    private ProfessionalType professionalType;
+    private LocalDate birthDate;
+    private Deficiency deficiency;
+    private String photo;
     private boolean verified = true;
+    private ProfessionalType professionalType;
+    private String healthUnitNumber;
 
     @Override
     public boolean isVerified() {

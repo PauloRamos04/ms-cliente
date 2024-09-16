@@ -18,6 +18,7 @@ public class Patient implements Verifiable { // Implementando a interface
 
     private String firstName;
     private String lastName;
+    private String password;
     private String cpf;
     private String email;
     private String phone;
@@ -26,7 +27,6 @@ public class Patient implements Verifiable { // Implementando a interface
     private LocalDate birthDate;
     private Deficiency deficiency;
     private String photo;
-    private String password;
     private UUID verificationToken;
     private boolean verified = false;
 
