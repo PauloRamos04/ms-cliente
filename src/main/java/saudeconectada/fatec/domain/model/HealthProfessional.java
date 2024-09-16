@@ -2,16 +2,18 @@ package saudeconectada.fatec.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 import saudeconectada.fatec.domain.enums.Deficiency;
 import saudeconectada.fatec.domain.enums.Gender;
 import saudeconectada.fatec.domain.enums.ProfessionalType;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "health_professional")
-public class HealthProfessional implements Verifiable { // Implementando a interface
+public class HealthProfessional implements Verifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,12 +30,16 @@ public class HealthProfessional implements Verifiable { // Implementando a inter
     private LocalDate birthDate;
     private Deficiency deficiency;
     private String photo;
-    private boolean verified = true;
     private ProfessionalType professionalType;
+    @Setter
+    private UUID verificationToken;
+    @Setter
+    private boolean verified = false;
     private String healthUnitNumber;
 
     @Override
     public boolean isVerified() {
         return verified;
     }
+
 }

@@ -2,6 +2,7 @@ package saudeconectada.fatec.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 import saudeconectada.fatec.domain.enums.Deficiency;
 import saudeconectada.fatec.domain.enums.Gender;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "patient")
-public class Patient implements Verifiable { // Implementando a interface
+public class Patient implements Verifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +28,9 @@ public class Patient implements Verifiable { // Implementando a interface
     private LocalDate birthDate;
     private Deficiency deficiency;
     private String photo;
+    @Setter
     private UUID verificationToken;
+    @Setter
     private boolean verified = false;
 
     @Override

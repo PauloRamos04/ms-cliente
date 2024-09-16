@@ -3,20 +3,16 @@ package saudeconectada.fatec.infra.email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import saudeconectada.fatec.domain.model.Patient;
-import saudeconectada.fatec.repository.PatientRepository;
+import saudeconectada.fatec.domain.model.Verifiable;
 
 @Service
 public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
-
-    @Autowired
-    private PatientRepository patientRepository;
 
     public void sendEmail(String to, String subject, String body) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -31,14 +27,14 @@ public class EmailService {
         }
     }
 
-    public void sendVerifyMail(Patient patient) {
-        String to = patient.getEmail();
+    public void sendVerifyMail(Verifiable user, String userType) {
+        String to = user.getEmail();
         String subject = "Verifique seu e-mail";
-        String body = generateVerifyMailBody(patient.getVerificationToken().toString());
+        String body = generateVerifyMailBody(user.getVerificationToken().toString(), userType);
         sendEmail(to, subject, body);
     }
 
-    private String generateVerifyMailBody(String token) {
+    private String generateVerifyMailBody(String token, String userType) {
         return "<html>" +
                 "<head>" +
                 "<style>" +
@@ -64,7 +60,7 @@ public class EmailService {
                 "<div class='content'>" +
                 "<p>Prezado(a),</p>" +
                 "<p>Obrigado por se registrar na nossa plataforma. Para concluir o seu cadastro e ativar sua conta, por favor, clique no botão abaixo:</p>" +
-                "<p><a href='http://localhost:8080/verification-result.html?token=" + token + "' class='button'>Verificar E-mail</a></p>" +
+                "<p><a href='http://localhost:8080/auth/verify?token=" + token + "&userType=" + userType + "' class='button'>Verificar E-mail</a></p>" +
                 "<p>Se você não se registrou ou se não reconhece esta solicitação, por favor ignore este e-mail.</p>" +
                 "<p>Para mais informações ou assistência, não hesite em entrar em contato com nossa equipe de suporte.</p>" +
                 "</div>" +
@@ -79,9 +75,4 @@ public class EmailService {
                 "</body>" +
                 "</html>";
     }
-
-
-
-
-
 }

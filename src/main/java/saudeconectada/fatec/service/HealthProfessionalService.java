@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import saudeconectada.fatec.domain.dto.HealthProfessionalDTO;
 import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.domain.model.Verifiable;
+import saudeconectada.fatec.infra.email.EmailService;
 import saudeconectada.fatec.repository.HealthProfessionalRepository;
 import saudeconectada.fatec.validators.heathProfessional.HealthProfessionalValidator;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class HealthProfessionalService extends UserService<HealthProfessionalDTO> {
@@ -23,6 +25,9 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private List<HealthProfessionalValidator> validators;
@@ -40,6 +45,8 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
         healthProfessionalDTO.setPassword(encryptedPassword);
         HealthProfessional healthProfessional = modelMapper.map(healthProfessionalDTO, HealthProfessional.class);
         healthProfessional.setPassword(encryptedPassword);
+        healthProfessional.setVerificationToken(UUID.randomUUID());
+        emailService.sendVerifyMail(healthProfessional, "healthprofessional");
         healthProfessionalRepository.save(healthProfessional);
     }
 

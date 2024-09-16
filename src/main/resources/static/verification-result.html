@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificação de E-mail</title>
+    <title>Resultado da Verificação</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +27,8 @@
         }
         h1 {
             color: #007bff;
-            margin: 0 0 10px 0;
+            margin: 0 0 20px 0;
+            font-size: 24px;
         }
         p {
             font-size: 18px;
@@ -43,44 +44,54 @@
             text-decoration: none;
             border-radius: 5px;
             cursor: pointer;
+            border: none;
+            margin-top: 20px;
         }
         .button-close {
             background: #dc3545;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Verificação de E-mail</h1>
-    <p id="message">Aguarde, estamos processando sua verificação...</p>
+    <h1>Resultado da Verificação</h1>
+    <div id="spinner" class="spinner"></div>
+    <p id="message">Estamos processando sua verificação, por favor aguarde...</p>
     <button id="button" class="button button-close" style="display: none;" onclick="window.close();">Fechar</button>
 </div>
 <script>
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
+        const message = urlParams.get('message');
         const messageElem = document.getElementById('message');
         const buttonElem = document.getElementById('button');
+        const spinnerElem = document.getElementById('spinner');
 
-        if (token) {
-            // Simula uma chamada AJAX para verificar o token com o backend
-            setTimeout(() => {
-                // Substitua o código de simulação por uma chamada real ao backend, se necessário
-                fetch(`/auth/verify?token=${token}`, { method: 'GET' })
-                    .then(response => {
-                        if (response.ok) {
-                            messageElem.textContent = 'Seu e-mail foi verificado com sucesso!';
-                            buttonElem.style.display = 'inline-block';
-                        } else {
-                            messageElem.textContent = 'Token inválido ou expirado.';
-                        }
-                    })
-                    .catch(() => {
-                        messageElem.textContent = 'Erro ao processar a verificação.';
-                    });
-            }, 2000);
+        spinnerElem.style.display = 'none';
+
+        if (message) {
+            const decodedMessage = decodeURIComponent(message);
+            if (decodedMessage.includes('autenticado')) {
+                messageElem.textContent = 'Seu e-mail foi verificado com sucesso! Você pode fechar esta janela.';
+                buttonElem.style.display = 'inline-block';
+            } else {
+                messageElem.textContent = decodedMessage;
+            }
         } else {
-            messageElem.textContent = 'Token inválido ou expirado.';
+            messageElem.textContent = 'Token inválido ou expirado. Verifique o link enviado no seu e-mail.';
         }
     };
 </script>

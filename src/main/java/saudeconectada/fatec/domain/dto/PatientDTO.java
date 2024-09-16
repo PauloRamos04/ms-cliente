@@ -7,11 +7,11 @@ import saudeconectada.fatec.domain.enums.Deficiency;
 import saudeconectada.fatec.domain.enums.Gender;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @Setter
 public class PatientDTO {
+
     @NotBlank(message = "O primeiro nome não deve ser nulo")
     private String firstName;
 
@@ -22,8 +22,8 @@ public class PatientDTO {
     @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos, sem caracteres especiais.")
     private String cpf;
 
-    @Email(message = "Email deve ser válido")
     @NotBlank(message = "O email não deve ser nulo")
+    @Email(message = "Email deve ser válido")
     private String email;
 
     @NotBlank(message = "O telefone não deve ser nulo")
@@ -38,11 +38,11 @@ public class PatientDTO {
     @NotNull(message = "A data de nascimento não deve ser nula")
     private LocalDate birthDate;
 
-    @NotNull(message = "A deficiencia não pode ser nula")
+    @NotNull(message = "A deficiência não pode ser nula")
     private Deficiency deficiency;
 
     private String photo;
 
-    @Size(min = 8, max = 20, message = "Tamanho deve ser entre 8 e 20")
+    @Size(min = 8, max = 20, message = "Tamanho da senha deve ser entre 8 e 20")
     private String password;
 }

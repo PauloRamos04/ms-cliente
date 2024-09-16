@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.domain.model.Patient;
-import saudeconectada.fatec.repository.PatientRepository;
-import saudeconectada.fatec.infra.email.VerifyService;
+import saudeconectada.fatec.domain.model.Verifiable;
 
-import java.util.Optional;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 @RestController
@@ -21,25 +24,54 @@ public class VerifyController {
     @Autowired
     private VerifyService verifyService;
 
-    @Autowired
-    private PatientRepository patientRepository;
-
     @GetMapping("/verify")
-    public ResponseEntity<String> verify(@RequestParam("token") String token) {
+    public ResponseEntity<String> verify(@RequestParam("token") String token, @RequestParam("userType") String userType) {
         try {
             UUID verificationToken = UUID.fromString(token);
-            Optional<Patient> patientOptional = patientRepository.findByVerificationToken(verificationToken);
+            Class<? extends Verifiable> userClass;
 
-            if (patientOptional.isPresent()) {
-                String message = verifyService.verifyUser(verificationToken);
-                return ResponseEntity.ok(message);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido ou expirado.");
+            switch (userType.toLowerCase()) {
+                case "patient":
+                    userClass = Patient.class;
+                    break;
+                case "healthprofessional":
+                    userClass = HealthProfessional.class;
+                    break;
+                default:
+                    return createErrorRedirect("Tipo de usuário inválido.");
             }
+
+            String message = verifyService.verifyUser(verificationToken, userClass);
+            return createSuccessRedirect(message);
+
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+            return createErrorRedirect("Token inválido.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao autenticar paciente.");
+            return createErrorRedirect("Erro ao autenticar usuário.");
+        }
+    }
+
+    private ResponseEntity<String> createSuccessRedirect(String message) {
+        try {
+            String encodedMessage = URLEncoder.encode(message, "UTF-8");
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("/verification-result.html?message=" + encodedMessage))
+                    .build();
+        } catch (UnsupportedEncodingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro interno ao processar a mensagem.");
+        }
+    }
+
+    private ResponseEntity<String> createErrorRedirect(String errorMessage) {
+        try {
+            String encodedMessage = URLEncoder.encode(errorMessage, "UTF-8");
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("/verification-result.html?message=" + encodedMessage))
+                    .build();
+        } catch (UnsupportedEncodingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro interno ao processar a mensagem.");
         }
     }
 }

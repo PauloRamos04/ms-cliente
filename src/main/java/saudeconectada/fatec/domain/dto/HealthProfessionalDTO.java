@@ -1,12 +1,8 @@
 package saudeconectada.fatec.domain.dto;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import saudeconectada.fatec.domain.enums.Gender;
@@ -18,45 +14,47 @@ import java.time.LocalDate;
 @Setter
 public class HealthProfessionalDTO {
 
-    @NotNull
+    @NotBlank(message = "O primeiro nome não deve ser nulo")
     @Size(min = 3, max = 50)
-    private String name;
+    private String firstName;
 
-    @NotNull
-    @Size(min = 8, max = 20)
+    @NotBlank(message = "O sobrenome não deve ser nulo")
+    @Size(min = 3, max = 50)
+    private String lastName;
+
+    @NotBlank(message = "A senha não deve ser nula")
+    @Size(min = 8, max = 20, message = "Tamanho da senha deve ser entre 8 e 20")
     private String password;
 
-    @NotNull
-    @Size(min = 11, max = 11, message = "O CPF deve ter 11 dígitos.")
-    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter apenas números.")
-    @Column(unique = true)
+    @NotBlank(message = "O CPF não deve ser nulo")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos, sem caracteres especiais.")
     private String cpf;
 
-    @NotNull
-    @Email
+    @NotBlank(message = "O email não deve ser nulo")
+    @Email(message = "Email deve ser válido")
     @Size(max = 100)
-    @Column(unique = true)
     private String email;
 
-    @NotNull
+    @NotBlank(message = "O número da unidade de saúde não deve ser nulo")
     @Size(max = 50)
     private String healthUnitNumber;
 
     @Size(max = 15)
     private String phone;
 
-    @NotNull
+    @NotBlank(message = "O endereço não deve ser nulo")
     private String address;
 
-    @NotNull
+    @NotNull(message = "A data de nascimento não deve ser nula")
     private LocalDate birthDate;
 
-    @NotNull
+    @NotNull(message = "O gênero não deve ser nulo")
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @NotNull
-    @Enumerated
+    @NotNull(message = "O tipo profissional não deve ser nulo")
+    @Enumerated(EnumType.STRING)
     private ProfessionalType professionalType;
 
+    private String photo;
 }

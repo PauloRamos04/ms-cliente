@@ -53,7 +53,7 @@ public class PatientService extends UserService<PatientDTO> {
         Patient patient = modelMapper.map(patientDTO, Patient.class);
         patient.setPassword(encryptedPassword);
         patient.setVerificationToken(UUID.randomUUID());
-        emailService.sendVerifyMail(patient);
+        emailService.sendVerifyMail(patient, "patient");
         patientRepository.save(patient);
 
     }
