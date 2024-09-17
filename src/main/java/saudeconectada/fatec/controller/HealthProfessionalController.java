@@ -35,13 +35,7 @@ public class HealthProfessionalController extends UserController<HealthProfessio
 
     @PostMapping("/register")
     public ResponseEntity<String> registerHealthProfessional(@Validated @RequestBody HealthProfessionalDTO healthProfessionalDTO) {
-        try {
-            healthProfessionalService.registerUser(healthProfessionalDTO);
-            return ResponseEntity.ok("Profissional de saúde cadastrado com sucesso.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao cadastrar profissional de saúde.");
-        }
+        healthProfessionalService.registerUser(healthProfessionalDTO);
+        return ResponseEntity.ok("Profissional de saúde cadastrado com sucesso.");
     }
 }

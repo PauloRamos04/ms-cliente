@@ -36,14 +36,8 @@ public class PatientController extends UserController<PatientDTO> {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerPatient(@Validated @RequestBody PatientDTO patientDTO) {
-        try {
-            patientService.registerUser(patientDTO);
-            return ResponseEntity.ok("Paciente cadastrado com sucesso.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        patientService.registerUser(patientDTO);
+        return ResponseEntity.ok("Paciente cadastrado com sucesso.");
     }
 
 }

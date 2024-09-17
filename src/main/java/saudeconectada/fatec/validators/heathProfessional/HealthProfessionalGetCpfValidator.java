@@ -1,8 +1,8 @@
 package saudeconectada.fatec.validators.heathProfessional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
+import saudeconectada.fatec.exception.CustomException;
 import saudeconectada.fatec.repository.HealthProfessionalRepository;
 
 @Component
@@ -11,9 +11,9 @@ public class HealthProfessionalGetCpfValidator implements HealthProfessionalVali
     @Autowired
     private HealthProfessionalRepository healthProfessionalRepository;
 
-    public void validar(String cpf){
-        if (healthProfessionalRepository.existsByCpf(cpf)){
-            throw new BadCredentialsException("CPF ja cadastrado");
+    public void validar(String cpf) {
+        if (healthProfessionalRepository.existsByCpf(cpf)) {
+            throw new CustomException("CPF já cadastrado", "CPF_ALREADY_REGISTERED");
         }
     }
 }

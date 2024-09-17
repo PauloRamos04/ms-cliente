@@ -2,11 +2,13 @@ package saudeconectada.fatec.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import saudeconectada.fatec.domain.dto.HealthProfessionalDTO;
 import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.domain.model.Verifiable;
+import saudeconectada.fatec.exception.CustomException;
 import saudeconectada.fatec.infra.email.EmailService;
 import saudeconectada.fatec.repository.HealthProfessionalRepository;
 import saudeconectada.fatec.validators.heathProfessional.HealthProfessionalValidator;
@@ -38,16 +40,14 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
 
     @Override
     public synchronized void registerUser(HealthProfessionalDTO healthProfessionalDTO) {
+            validators.forEach(v -> v.validar(healthProfessionalDTO.getCpf()));
+            String encryptedPassword = passwordEncoder.encode(healthProfessionalDTO.getPassword());
+            healthProfessionalDTO.setPassword(encryptedPassword);
+            HealthProfessional healthProfessional = modelMapper.map(healthProfessionalDTO, HealthProfessional.class);
+            healthProfessional.setPassword(encryptedPassword);
+            healthProfessional.setVerificationToken(UUID.randomUUID());
+            emailService.sendVerifyMail(healthProfessional, "healthprofessional");
+            healthProfessionalRepository.save(healthProfessional);
 
-        validators.forEach(v -> v.validar(healthProfessionalDTO.getCpf()));
-
-        String encryptedPassword = passwordEncoder.encode(healthProfessionalDTO.getPassword());
-        healthProfessionalDTO.setPassword(encryptedPassword);
-        HealthProfessional healthProfessional = modelMapper.map(healthProfessionalDTO, HealthProfessional.class);
-        healthProfessional.setPassword(encryptedPassword);
-        healthProfessional.setVerificationToken(UUID.randomUUID());
-        emailService.sendVerifyMail(healthProfessional, "healthprofessional");
-        healthProfessionalRepository.save(healthProfessional);
     }
-
 }
