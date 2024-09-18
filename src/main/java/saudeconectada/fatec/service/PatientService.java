@@ -41,6 +41,10 @@ public class PatientService extends UserService<PatientDTO> {
         return this.patientRepository.findAll();
     }
 
+    public void applyToEntity(PatientDTO dto, Patient patient){
+        modelMapper.map(dto, patient);
+    }
+
     @Override
     public synchronized void registerUser(PatientDTO patientDTO) {
 
@@ -63,7 +67,7 @@ public class PatientService extends UserService<PatientDTO> {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new NoSuchFieldException("Paciente não encontrado com o id: " + id));
 
-        patientDTO.applyToEntity(patient);
+        applyToEntity(patientDTO, patient);
         patientRepository.save(patient);
 
         return patientDTO;

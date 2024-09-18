@@ -54,18 +54,4 @@ public class PatientDTO {
     @NotBlank(message = "A senha não deve ser nula")
     @Size(min = 8, max = 20, message = "A senha deve ter entre 8 e 20 caracteres")
     private String password;
-
-    public void applyToEntity(Patient patient) {
-        if (this.firstName != null) patient.setFirstName(this.firstName);
-        if (this.lastName != null) patient.setLastName(this.lastName);
-        if (this.cpf != null) patient.setCpf(this.cpf);
-        if (this.email != null) patient.setEmail(this.email);
-        if (this.phone != null) patient.setPhone(this.phone);
-        if (this.address != null) patient.setAddress(this.address);
-        if (this.gender != null) patient.setGender(this.gender);
-        if (this.birthDate != null) patient.setBirthDate(this.birthDate);
-        if (this.deficiency != null) patient.setDeficiency(this.deficiency);
-        if (this.photo != null) patient.setPhoto(this.photo);
-        if (this.password != null) patient.setPassword(this.password);
-    }
 }
