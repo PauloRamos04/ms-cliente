@@ -38,4 +38,10 @@ public class HealthProfessionalController extends UserController<HealthProfessio
         healthProfessionalService.registerUser(healthProfessionalDTO);
         return ResponseEntity.ok("Profissional de saúde cadastrado com sucesso.");
     }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<String> updateHealthProfessional(@PathVariable String id, @Validated @RequestBody HealthProfessionalDTO healthProfessionalDTO) throws NoSuchFieldException {
+        healthProfessionalService.atualizaUser(Long.valueOf(id), healthProfessionalDTO);
+        return ResponseEntity.ok("Profissional atualizado com sucesso");
+    }
 }

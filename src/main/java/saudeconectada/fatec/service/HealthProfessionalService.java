@@ -14,6 +14,7 @@ import saudeconectada.fatec.repository.HealthProfessionalRepository;
 import saudeconectada.fatec.validators.heathProfessional.HealthProfessionalValidator;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -38,6 +39,10 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
         return this.healthProfessionalRepository.findAll();
     }
 
+    public void appluToEntity(HealthProfessionalDTO dto, HealthProfessional healthProfessional){
+        modelMapper.map(dto, healthProfessional);
+    }
+
     @Override
     public synchronized void registerUser(HealthProfessionalDTO healthProfessionalDTO) {
             validators.forEach(v -> v.validar(healthProfessionalDTO.getCpf()));
@@ -48,6 +53,17 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
             healthProfessional.setVerificationToken(UUID.randomUUID());
             emailService.sendVerifyMail(healthProfessional, "healthprofessional");
             healthProfessionalRepository.save(healthProfessional);
+    }
+
+    public HealthProfessionalDTO atualizaUser(Long id, HealthProfessionalDTO healthProfessionalDTO) throws  NoSuchFieldException{
+        HealthProfessional healthProfessional =  healthProfessionalRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Profissional de saude não encontrado com esse ID: " + id));
+
+        appluToEntity(healthProfessionalDTO, healthProfessional);
+        healthProfessionalRepository.save(healthProfessional);
+
+        return healthProfessionalDTO;
+
 
     }
 }

@@ -3,6 +3,7 @@ package saudeconectada.fatec.domain.dto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import saudeconectada.fatec.domain.enums.Gender;
