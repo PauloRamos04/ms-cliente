@@ -115,4 +115,17 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(NoSuchFieldException.class)
+    public ResponseEntity<ErrorResponse> handleNoSuchFieldException(NoSuchFieldException ex) {
+        logger.error("NoSuchFieldException: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Erro no parametro",
+                "ParamsError",
+                "INVALID_PARAMS",
+                Map.of("error", "Parametro fornecido invalido ou inexistente. Verifique os dados fornecidos")
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }

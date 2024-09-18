@@ -16,6 +16,7 @@ import saudeconectada.fatec.validators.user.UserValidator;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -57,6 +58,17 @@ public class PatientService extends UserService<PatientDTO> {
         patientRepository.save(patient);
 
     }
+
+    public PatientDTO atualizarUser(Long id, PatientDTO patientDTO) throws NoSuchFieldException {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new NoSuchFieldException("Paciente não encontrado com o id: " + id));
+
+        patientDTO.applyToEntity(patient);
+        patientRepository.save(patient);
+
+        return patientDTO;
+    }
+
 
 
 }

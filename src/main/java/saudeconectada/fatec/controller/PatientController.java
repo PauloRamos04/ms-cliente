@@ -40,4 +40,10 @@ public class PatientController extends UserController<PatientDTO> {
         return ResponseEntity.ok("Paciente cadastrado com sucesso.");
     }
 
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<String> uptadePatient(@PathVariable String id, @Validated @RequestBody PatientDTO patientDTO) throws NoSuchFieldException {
+        patientService.atualizarUser(Long.valueOf(id), patientDTO);
+        return ResponseEntity.ok("Paciente atualizado com sucesso.");
+    }
+
 }
