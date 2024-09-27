@@ -8,12 +8,13 @@ import saudeconectada.fatec.domain.enums.Gender;
 import saudeconectada.fatec.domain.enums.ProfessionalType;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "health_professional")
-public class HealthProfessional implements Verifiable {
+public class HealthProfessional extends UserBase implements Verifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class HealthProfessional implements Verifiable {
     private String phone;
     private String address;
     private Gender gender;
-    private LocalDate birthDate;
+    private Date birthDate;
     private Deficiency deficiency;
     private String photo;
     private ProfessionalType professionalType;
@@ -36,6 +37,16 @@ public class HealthProfessional implements Verifiable {
     @Setter
     private boolean verified = false;
     private String healthUnitNumber;
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public UUID getVerificationToken() {
+        return verificationToken;
+    }
 
     @Override
     public boolean isVerified() {

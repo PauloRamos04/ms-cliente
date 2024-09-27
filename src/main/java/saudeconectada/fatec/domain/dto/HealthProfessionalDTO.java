@@ -10,6 +10,7 @@ import saudeconectada.fatec.domain.enums.Gender;
 import saudeconectada.fatec.domain.enums.ProfessionalType;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -47,7 +48,7 @@ public class HealthProfessionalDTO {
     private String address;
 
     @NotNull(message = "A data de nascimento não deve ser nula")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @NotNull(message = "O gênero não deve ser nulo")
     @Enumerated(EnumType.STRING)

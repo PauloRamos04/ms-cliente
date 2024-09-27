@@ -1,6 +1,7 @@
 package saudeconectada.fatec.domain.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import saudeconectada.fatec.domain.enums.Deficiency;
@@ -8,6 +9,7 @@ import saudeconectada.fatec.domain.enums.Gender;
 import saudeconectada.fatec.domain.model.Patient;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -43,7 +45,7 @@ public class PatientDTO {
 
     @NotNull(message = "A data de nascimento não deve ser nula")
     @Past(message = "A data de nascimento deve ser no passado")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @NotNull(message = "A deficiência não pode ser nula")
     private Deficiency deficiency;
