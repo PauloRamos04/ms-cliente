@@ -2,13 +2,10 @@ package saudeconectada.fatec.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import saudeconectada.fatec.domain.dto.HealthProfessionalDTO;
 import saudeconectada.fatec.domain.model.HealthProfessional;
-import saudeconectada.fatec.domain.model.Verifiable;
-import saudeconectada.fatec.exception.CustomException;
 import saudeconectada.fatec.infra.email.EmailService;
 import saudeconectada.fatec.repository.HealthProfessionalRepository;
 import saudeconectada.fatec.validators.heathProfessional.HealthProfessionalValidator;
@@ -55,14 +52,12 @@ public class HealthProfessionalService extends UserService<HealthProfessionalDTO
             healthProfessionalRepository.save(healthProfessional);
     }
 
-    public HealthProfessionalDTO atualizaUser(Long id, HealthProfessionalDTO healthProfessionalDTO) throws  NoSuchFieldException{
+    public void atualizaUser(Long id, HealthProfessionalDTO healthProfessionalDTO) throws  NoSuchFieldException{
         HealthProfessional healthProfessional =  healthProfessionalRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Profissional de saude não encontrado com esse ID: " + id));
 
         appluToEntity(healthProfessionalDTO, healthProfessional);
         healthProfessionalRepository.save(healthProfessional);
-
-        return healthProfessionalDTO;
 
 
     }

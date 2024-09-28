@@ -6,17 +6,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import saudeconectada.fatec.domain.dto.PatientDTO;
 import saudeconectada.fatec.domain.model.Patient;
-import saudeconectada.fatec.domain.model.Verifiable;
 import saudeconectada.fatec.infra.email.EmailService;
 import saudeconectada.fatec.repository.PatientRepository;
-import saudeconectada.fatec.validators.patient.PatientGetCpfValidator;
-import saudeconectada.fatec.validators.patient.PatientGetEmailValidator;
 import saudeconectada.fatec.validators.patient.PatientValidator;
-import saudeconectada.fatec.validators.user.UserValidator;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
