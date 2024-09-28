@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "health_professional")
-public class HealthProfessional extends UserBase implements Verifiable {
+public class HealthProfessional implements Verifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

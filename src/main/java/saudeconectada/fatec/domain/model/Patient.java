@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "patient")
-public class Patient extends UserBase implements Verifiable {
+public class Patient implements Verifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
