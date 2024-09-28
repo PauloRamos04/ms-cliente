@@ -51,6 +51,7 @@ public abstract class UserService<T> {
     }
 
     public void logoutUser(String cpf) {
+        logger.info("Usuario fez logout {}", cpf);
         loggedInUsers.remove(cpf);
     }
 
