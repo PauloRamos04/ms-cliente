@@ -37,7 +37,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         // Recuperar token do cabeçalho da requisição
         String token = recoverToken(request);
         if (token != null) {
-            String cpf = tokenService.getUsernameFromToken(token);
+            String cpf = tokenService.getClaimFromToken(token, claims -> claims.get("cpf", String.class));
             if (cpf != null) {
                 UserDetails user;
                 try {

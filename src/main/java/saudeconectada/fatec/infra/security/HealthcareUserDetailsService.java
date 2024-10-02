@@ -1,11 +1,9 @@
 package saudeconectada.fatec.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import saudeconectada.fatec.domain.model.HealthProfessional;
 import saudeconectada.fatec.domain.model.Patient;
@@ -41,7 +39,7 @@ public class HealthcareUserDetailsService implements UserDetailsService {
         if (patient == null) {
             return null;
         }
-        return new User(patient.getCpf(), patient.getPassword(), new ArrayList<>());
+        return new CustomUserDetails(patient.getCpf(), patient.getFirstName(), patient.getPassword(), new ArrayList<>());
     }
 
     public UserDetails loadHealthProfessionalByCpf(String cpf) throws UsernameNotFoundException {
@@ -49,6 +47,6 @@ public class HealthcareUserDetailsService implements UserDetailsService {
         if (healthProfessional == null) {
             return null;
         }
-        return new User(healthProfessional.getCpf(), healthProfessional.getPassword(), new ArrayList<>());
+        return new CustomUserDetails(healthProfessional.getCpf(), healthProfessional.getFirstName(), healthProfessional.getPassword(), new ArrayList<>());
     }
 }

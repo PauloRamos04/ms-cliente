@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
+
 
 import java.security.Key;
 import java.util.Date;
@@ -25,19 +27,23 @@ public class TokenService {
     @Value("${api.security.token.expiration}")
     private Long expiration;
 
-    // Método para gerar o token e armazená-lo na sessão HTTP
     public String generateToken(UserDetails userDetails) {
-        String token = doGenerateToken(Map.of("cpf", userDetails.getUsername()).toString(), userDetails.getUsername());
-        return token;
+        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails; // Converta para CustomUserDetails
+        String cpf = customUserDetails.getUsername();
+        String firstName = customUserDetails.getFirstName(); // Obtenha o firstName diretamente
+        String subject = cpf; // Use o CPF como subject
+        return doGenerateToken(cpf, firstName, subject);
     }
 
+
     // Método interno para geração do token JWT usando o JJWT
-    private String doGenerateToken(String cpf, String subject) {
+    private String doGenerateToken(String cpf, String firstName, String subject) {
         Key signingKey = Keys.hmacShaKeyFor(secret.getBytes()); // Usando a chave segura
 
         // Cria um HashMap de claims
         Map<String, Object> claims = new HashMap<>();
-        claims.put("cpf", cpf); // Adicione o CPF como claim
+        claims.put("cpf", cpf);
+        claims.put("firstName", firstName); // Adicione o firstName como claim
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -65,7 +71,7 @@ public class TokenService {
     }
 
     // Método genérico para obter claims do token
-    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    protected <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) { // Alterado para protected
         final Claims claims = Jwts.parser()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes())) // Usando a chave segura
                 .parseClaimsJws(token)
